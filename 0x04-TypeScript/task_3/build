@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+# colors
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+NC='\033[0m' # No Color
+
+#func to print
+
+cprint () {
+  local color=$1
+  local msg=$2
+  local NC=${NC}
+  echo -e "${color}${msg}${NC}"
+}
+
+# build func
+
+build () {
+  cprint "${YELLOW}" "Building..."
+  npm run build > build.log
+  if [ "$?" -eq 0 ]; then
+    cprint "${GREEN}" "Build success"
+    rm build.log
+  else
+    cprint "${RED}" "Build failed"
+  fi
+}
+
+clean () {
+  cprint "$YELLOW" "[?] Do you want to remove the building files dist & node_modules [y/n]"
+  dirbuild='dist'
+  dirnode="node_modules"
+  read -n1 -r Pick
+
+  if [ "$Pick" == 'y' ] || [ "$Pick" == 'Y' ]; then
+      rm -rf $dirbuild $dirnode
+      cprint "$GREEN" "dist & node_modules is removed"
+  else
+    cprint "$RED" "Nothing to remove"
+  fi
+}
+# main
+build
+clean
