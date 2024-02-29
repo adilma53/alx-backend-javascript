@@ -5,7 +5,9 @@ const inputIterface = readline.createInterface({
   output: process.stdout
 });
 
-inputIterface.question('Welcome to Holberton School, what is your name?', (answer) => {
-  console.log(answer);
+console.log('Welcome to Holberton School, what is your name?')
+
+inputIterface.on('line', (answer) => {
+  console.log('Your name is: ' + answer);
   inputIterface.close();
 });
