@@ -1,28 +1,27 @@
-const fs = require('fs').promises;
+const fsPromises = require('fs').promises;
 
 async function countStudents(filename) {
   return new Promise((resolve, reject) => {
-    fs.readFile(filename, 'utf8')
-      .then((data) => {
-        const db = data
+    fsPromises.readFile(filename, 'utf8')
+      .then((fileContents) => {
+        const database = fileContents
           .toString()
           .split('\n')
           .filter((line) => line.trim() !== '');
-        console.log(`Number of students: ${db.length - 1}`);
+        console.log(`Number of students: ${database.length - 1}`);
         const fields = {};
-        db.slice(1).forEach((student) => {
-          const field = student.split(',')[3];
-          const name = student.split(',')[0];
+        database.slice(1).forEach((studentRecord) => {
+          const field = studentRecord.split(',')[3];
+          const firstName = studentRecord.split(',')[0];
           if (fields[field]) {
-            fields[field].push(name);
+            fields[field].push(firstName);
           } else {
-            fields[field] = [name];
+            fields[field] = [firstName];
           }
         });
         Object.keys(fields).forEach((field) => {
           console.log(
-            `Number of students in ${field}: ${
-              fields[field].length
+            `Number of students in ${field}: ${fields[field].length
             }. List: ${fields[field].join(', ')}`,
           );
         });
